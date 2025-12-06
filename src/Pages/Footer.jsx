@@ -1,13 +1,30 @@
 import React from 'react';
+import { NavLink } from 'react-router';
 
 const Footer = () => {
-    return (
-        <footer className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
-  <aside>
-    <p>Copyright © {new Date().getFullYear()} - All right reserved by ACME Industries Ltd</p>
-  </aside>
+  return (
+    <footer className="bg-gray-100 text-gray-300 py-8 px-6 mt-10">
+  <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-sm">
+
+    <aside className="max-w-lg">
+      <NavLink to="/" className="btn btn-ghost text-2xl font-bold text-amber-400 hover:bg-transparent">
+        GOTRACK
+      </NavLink>
+      
+      <p className="mt-3 text-gray-700 leading-relaxed">
+        Garments Order & Production Tracker – Simple web system for small & medium factories to track orders, manage production stages, control inventory, and deliver on time.
+      </p>
+    </aside>
+
+    <div className="text-left md:text-right">
+      <p className="text-gray-800">
+        Copyright © {new Date().getFullYear()} - All rights reserved by <span className="text-amber-600 font-medium">GOTRACK Industries Ltd</span>
+      </p>
+    </div>
+
+  </div>
 </footer>
-    );
+  );
 };
 
 export default Footer;
