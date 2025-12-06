@@ -5,6 +5,6 @@ body{
 }
 @import "tailwindcss";
 @plugin "daisyui";
-.menu.active{
-    background-color: 2px solid black;
+a.active{
+ @apply text-gray-300 bg-indigo-600 hover:text-orange-400;
 }
