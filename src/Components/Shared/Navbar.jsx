@@ -1,17 +1,33 @@
 import React from 'react';
 import { FaUserTie } from 'react-icons/fa';
 import { NavLink } from 'react-router';
+import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
+
+    const { user, logOut } = useAuth()
+
+    const userLogOut = () => {
+        logOut()
+            .then()
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     const navLinks = <>
         <li> <NavLink to="/">Home</NavLink></li>
         <li> <NavLink to="/all-product">All-Product</NavLink></li>
         <li> <NavLink to="/about">About Us</NavLink></li>
         <li> <NavLink to="/contact">Contact</NavLink></li>
-        <li> <NavLink to="/login">Login</NavLink></li>
-        <li> <NavLink to="/register">Register</NavLink></li>
-         </>
-                
+        {
+            !user && <>
+                <li> <NavLink to="/login">Login</NavLink></li>
+                <li> <NavLink to="/register">Register</NavLink></li>
+            </>
+        }
+    </>
+
 
     return (
         <div className="navbar bg-base-100 shadow-sm bg-gradient-to-r from-gray-800 to-cyan-900/50">
@@ -28,24 +44,24 @@ const Navbar = () => {
                 </div>
                 <NavLink to="/" className="btn btn-ghost text-xl bg-amber-50">GOTRACK</NavLink>
             </div>
-            
+
             <div className="navbar-end pr-1">
-               
+
                 <ul className="menu md:flex hidden menu-horizontal px-1">
                     {
                         navLinks
                     }
                 </ul>
 
-                <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="bg-gray-300 p-2 m-1 rounded-full"><FaUserTie size={24}/>
-                    </div>
-                    <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        {
-                            navLinks
-                        }
-                    </ul>
-                </div>
+                {
+                    user ? <div className="dropdown dropdown-end">
+                        <div tabIndex={0} role="button" className="bg-gray-300 p-2 m-1 rounded-full"><FaUserTie size={24} />
+                        </div>
+                        <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                            <li><a onClick={userLogOut}>Log Out</a></li>
+                        </ul>
+                    </div> : ""
+                }
             </div>
         </div>
     );

@@ -8,6 +8,7 @@ const Login = () => {
   const {signInUser} = useAuth()
   const { register, handleSubmit, formState: { errors } } = useForm()
 
+
   const handleLogin = (data) => {
     console.log('form data', data);
     signInUser(data.email, data.password)
