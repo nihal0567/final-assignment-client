@@ -5,7 +5,7 @@ const HeroSection = () => {
     <section className="relative bg-slate-950 text-white overflow-hidden">
       {/* Subtle animated background gradient */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-400/20 via-transparent to-cyan-600/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 via-transparent to-cyan-300/20" />
         <div className="absolute top-20 left-20 w-96 h-96 bg-amber-500/30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
