@@ -1,11 +1,20 @@
 
 import { useForm } from "react-hook-form";
 import { Link, } from "react-router";
+import useAuth from "../hooks/useAuth";
 
 const Register = () => {
   const { register, handleSubmit, formState:{errors}} = useForm()
+  const {registerUser, } = useAuth();
+
   const handleRegister = (data) => {
     console.log('after register', data);
+    registerUser(data.email, data.password)
+    .then(result =>{
+      console.log(result.user);
+    }) .catch(err=>{
+      console.log(err);
+    })
   }
 
   // const pattern = 
