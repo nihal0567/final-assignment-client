@@ -55,7 +55,10 @@ const Navbar = () => {
 
                 {
                     user ? <div className="dropdown dropdown-end">
-                        <div tabIndex={0} role="button" className="bg-gray-300 p-2 m-1 rounded-full"><FaUserTie size={24} />
+                        <div tabIndex={0} role="button" className="btn m-1 rounded-full p-2">
+                        {
+                         user ?  <img className='h-8 w-8 rounded-full' src={user.photoURL} alt="" /> : <FaUserTie size={24} />
+                        } 
                         </div>
                         <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li><a onClick={userLogOut}>Log Out</a></li>

@@ -1,24 +1,33 @@
 
 import { useForm } from "react-hook-form";
-import { Link, } from "react-router";
+import { Link } from "react-router";
 import useAuth from "../hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin";
 
 const Register = () => {
   const { register, handleSubmit, formState:{errors}} = useForm()
-  const {registerUser, } = useAuth();
+  const {registerUser,updateUser, setUser, user } = useAuth();
+
 
   const handleRegister = (data) => {
+    const {email, password, name, photoURL} = data
     console.log('after register', data);
-    registerUser(data.email, data.password)
+    registerUser(email, password)
     .then(result =>{
+      console.log(result);
+      updateUser(result.user,{displayName: name, photoURL: photoURL})
+      .then(()=>{
+        setUser({...user, photoURL: photoURL})
+      })
+      .catch()
       console.log(result.user);
+      
     }) .catch(err=>{
       console.log(err);
     })
   }
 
-  // const pattern = 
+
 
 
   return (
