@@ -1,6 +1,33 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const AllProduct = () => {
+  const products = [
+  {
+    id: 1,
+    image: "https://i.ibb.co.com/HLvzHJy6/download.jpg",
+    title: "Wireless Headphones",
+    category: "Electronics",
+    price: 59.99,
+    quantity: 20,
+  },
+  {
+    id: 2,
+    image: "https://i.ibb.co.com/KcK89jzd/images.jpg",
+    title: "Sports Shoes",
+    category: "Fashion",
+    price: 89.99,
+    quantity: 12,
+  },
+  {
+    id: 3,
+    image: "https://i.ibb.co.com/rSGFDxj/download.jpg",
+    title: "Office Chair",
+    category: "Furniture",
+    price: 129.99,
+    quantity: 5,
+  },
+];
     return (
         <div className="min-h-screen bg-slate-950 py-16 px-6">
       <div className="container mx-auto max-w-7xl">
@@ -14,9 +41,9 @@ const AllProduct = () => {
 
         {/* 3-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* {products.map((product) => (
+          {products.map((product) => (
             <div
-              key={product._id}
+              key={product.id}
               className="group relative bg-slate-900/70 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-500 transform hover:-translate-y-4"
             >
             
@@ -38,7 +65,7 @@ const AllProduct = () => {
 
           
               <div className="p-6 text-white">
-                <h3 className="text-2xl font-bold text-amber-300 truncate">{product.name}</h3>
+                <h3 className="text-2xl font-bold text-amber-300 truncate">{product.title}</h3>
 
                 <div className="mt-4 space-y-3">
            
@@ -50,7 +77,7 @@ const AllProduct = () => {
             
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400">Available</span>
-                    <span className={`text-xl font-bold ${product.quantity > 10 ? 'text-green-400' : 'text-red-400'}`}>
+                    <span className={`text-xl font-bold ${product.quantity >= 10 ? 'text-green-400' : 'text-red-400'}`}>
                       {product.quantity} pcs
                     </span>
                   </div>
@@ -67,15 +94,15 @@ const AllProduct = () => {
                 </div>
               </div>
             </div>
-          ))} */}
+          ))}
         </div>
 
         {/* No Products Message */}
-        {/* {products.length === 0 && (
+        {products.length === 0 && (
           <div className="text-center py-20">
             <p className="text-3xl text-gray-500">No products found</p>
           </div>
-        )} */}
+        )}
       </div>
     </div>
     );

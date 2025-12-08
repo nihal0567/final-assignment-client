@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaUserTie } from 'react-icons/fa';
-import { NavLink } from 'react-router';
+import {  Link, NavLink } from 'react-router';
 import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
@@ -62,6 +62,7 @@ const Navbar = () => {
                         </div>
                         <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li><a onClick={userLogOut}>Log Out</a></li>
+                            <li><Link to="/dashboard">Dashboard</Link></li>
                         </ul>
                     </div> : ""
                 }

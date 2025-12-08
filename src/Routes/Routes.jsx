@@ -8,6 +8,8 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import AllProduct from "../Pages/AllProduct";
 import AuthLayout from "../Layout/Auth/AuthLayout";
+import PrivateRoute from "../Pages/PrivateRoute";
+import ProductDetailsPage from "../Pages/ProductDetailsPage";
 
 export const router = createBrowserRouter([
     {
@@ -21,6 +23,10 @@ export const router = createBrowserRouter([
             {
                 path: '/all-product',
                 Component: AllProduct
+            },
+            {
+                path: '/product-details',
+                element: <PrivateRoute><ProductDetailsPage/></PrivateRoute>
             },
             {
                 path: '/about',
@@ -45,6 +51,9 @@ export const router = createBrowserRouter([
                 Component: Register
             },
         ]
+    },
+    {
+
     },
     {
         path: '/*',

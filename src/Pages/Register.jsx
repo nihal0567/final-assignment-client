@@ -4,24 +4,38 @@ import { Link } from "react-router";
 import useAuth from "../hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Register = () => {
   const { register, handleSubmit, formState:{errors}} = useForm()
-  const {registerUser,updateUser, setUser, user } = useAuth();
+  const {registerUser,updateUserProfile  } = useAuth();
 
 
   const handleRegister = (data) => {
-    const {email, password, name, photoURL} = data
+    const {email, password, name, } = data
+    const profileImg= data.photoURL[0]
+   
+
     console.log('after register', data);
     registerUser(email, password)
     .then(result =>{
       console.log(result);
-      updateUser(result.user,{displayName: name, photoURL: photoURL})
-      .then(()=>{
-        setUser({...user, photoURL: photoURL})
-        toast('Register Successful')
+      const formData = new FormData()
+      formData.append('image', profileImg)
+      const img_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_API_KEY}`
+      axios.post(img_API_URL, formData)
+      .then(res=>{
+        console.log(res.data.data.url);
+        const userProfile = {displayName: name, photoURL: res.data.data.url}
+        updateUserProfile(userProfile)
+        .then(()=>{
+          toast('Register Successful')
+          console.log('user pf update done');
+        })
+        .catch(err=>{
+          console.log(err);
+        })
       })
-      .catch()
       console.log(result.user);
       
     }) .catch(err=>{
@@ -90,7 +104,8 @@ const Register = () => {
             <input
               {...register('photoURL', { required: true })}
               name="photoURL"
-              className="w-full px-5 py-4 bg-slate-800/50 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
+              type="file"
+              className="w-full file-input file-input-neutral"
               placeholder="https://example.com/photo.jpg"
             />
             {
