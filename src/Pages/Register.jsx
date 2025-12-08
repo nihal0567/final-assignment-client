@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import useAuth from "../hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const { register, handleSubmit, formState:{errors}} = useForm()
@@ -18,6 +19,7 @@ const Register = () => {
       updateUser(result.user,{displayName: name, photoURL: photoURL})
       .then(()=>{
         setUser({...user, photoURL: photoURL})
+        toast('Register Successful')
       })
       .catch()
       console.log(result.user);

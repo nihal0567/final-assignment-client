@@ -17,7 +17,7 @@ const Navbar = () => {
 
     const navLinks = <>
         <li> <NavLink to="/">Home</NavLink></li>
-        <li> <NavLink to="/all-product">All-Product</NavLink></li>
+        <li> <NavLink to="/all-product">All-Products</NavLink></li>
         <li> <NavLink to="/about">About Us</NavLink></li>
         <li> <NavLink to="/contact">Contact</NavLink></li>
         {
@@ -57,7 +57,7 @@ const Navbar = () => {
                     user ? <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn m-1 rounded-full p-2">
                         {
-                         user ?  <img className='h-8 w-8 rounded-full' src={user.photoURL} alt="" /> : <FaUserTie size={24} />
+                         user ?  <img className='h-8 w-8 rounded-full' src={user?.photoURL} alt="" /> : <FaUserTie size={24} />
                         } 
                         </div>
                         <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">

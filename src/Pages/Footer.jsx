@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router';
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { Link, NavLink } from 'react-router';
 
 const Footer = () => {
   return (
@@ -17,9 +18,14 @@ const Footer = () => {
     </aside>
 
     <div className="text-left md:text-right">
-      <p className="text-gray-800">
+      <div className="text-gray-800">
         Copyright © {new Date().getFullYear()} - All rights reserved by <span className="text-amber-600 font-medium">GOTRACK Industries Ltd</span>
-      </p>
+      </div>
+      <div className="flex gap-2 mt-3 items-center">
+        <Link to="#"><FaLinkedinIn size={24}/></Link>
+        <Link to="#"><FaInstagram size={24}/></Link>
+        <Link to="#"><FaFacebookF size={24}/></Link>
+      </div>
     </div>
 
   </div>

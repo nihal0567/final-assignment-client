@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import useAuth from "../hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const {signInUser} = useAuth()
@@ -14,6 +15,7 @@ const Login = () => {
     signInUser(data.email, data.password)
     .then(result=>{
       console.log(result.user);
+      toast("Login Successful")
     }) .catch(err =>{
       console.log(err);
     })
