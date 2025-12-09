@@ -10,6 +10,7 @@ import AllProduct from "../Pages/AllProduct";
 import AuthLayout from "../Layout/Auth/AuthLayout";
 import PrivateRoute from "../Pages/PrivateRoute";
 import ProductDetailsPage from "../Pages/ProductDetailsPage";
+import Loading from "../Components/Loading";
 
 export const router = createBrowserRouter([
     {
@@ -19,12 +20,14 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 Component: Home,
-                loader: ()=> fetch('http://localhost:9000/limit-products')
+                loader: ()=> fetch('http://localhost:9000/limit-products'),
+                hydrateFallbackElement: <Loading />
             },
             {
                 path: '/all-product',
                 Component: AllProduct,
-                loader: ()=> fetch('http://localhost:9000/products-collection')
+                loader: ()=> fetch('http://localhost:9000/products-collection'),
+                hydrateFallbackElement: <Loading />
             },
             {
                 path: '/product-details',
