@@ -3,6 +3,7 @@ import HeroSection from '../Components/HeroSection';
 import { Link, useLoaderData } from 'react-router';
 import AllProduct from '../Pages/AllProduct';
 import Description from '../Pages/Description';
+import CustomerFeedback from '../Pages/CustomerFeedback';
 
 const Home = () => {
     const productsData = useLoaderData()
@@ -95,7 +96,7 @@ const Home = () => {
   </div>
             </div>
             <Description />
-            
+            <CustomerFeedback />
         </div>
     );
 };
