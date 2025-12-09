@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Cards = () => {
+const Cards = ({product}) => {
     return (
         <div className="min-h-screen bg-slate-950 py-16 px-6">
       <div className="container mx-auto max-w-7xl">
@@ -13,8 +13,8 @@ const Cards = () => {
         </div>
 
         {/* 3-Column Grid */}
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
             <div
               key={product._id}
               className="group relative bg-slate-900/70 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-500 transform hover:-translate-y-4"
@@ -58,7 +58,7 @@ const Cards = () => {
             
                 <div className="mt-6">
                   <Link
-                    to={`/product/${product._id}`}
+                    
                     className="w-full btn bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-lg border-none shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     View Details
@@ -66,15 +66,10 @@ const Cards = () => {
                 </div>
               </div>
             </div>
-          ))}
-        </div> */}
 
-        {/* No Products Message */}
-        {/* {products.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-3xl text-gray-500">No products found</p>
-          </div>
-        )} */}
+        </div>
+
+        
       </div>
     </div>
     );

@@ -1,33 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 
 const AllProduct = () => {
-  const products = [
-  {
-    id: 1,
-    image: "https://i.ibb.co.com/HLvzHJy6/download.jpg",
-    title: "Wireless Headphones",
-    category: "Electronics",
-    price: 59.99,
-    quantity: 20,
-  },
-  {
-    id: 2,
-    image: "https://i.ibb.co.com/KcK89jzd/images.jpg",
-    title: "Sports Shoes",
-    category: "Fashion",
-    price: 89.99,
-    quantity: 12,
-  },
-  {
-    id: 3,
-    image: "https://i.ibb.co.com/rSGFDxj/download.jpg",
-    title: "Office Chair",
-    category: "Furniture",
-    price: 129.99,
-    quantity: 5,
-  },
-];
+  const products = useLoaderData()
+
     return (
         <div className="min-h-screen bg-slate-950 py-16 px-6">
       <div className="container mx-auto max-w-7xl">

@@ -1,10 +1,77 @@
 import React from 'react';
 import HeroSection from '../Components/HeroSection';
+import { Link, useLoaderData } from 'react-router';
+import AllProduct from '../Pages/AllProduct';
 
 const Home = () => {
+    const productsData = useLoaderData()
     return (
         <div>
             <HeroSection></HeroSection>
+                <div className='text-4xl text-center my-6  bg-slate-900/70'>Our Products</div>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-20 gap-2.5 bg-slate-900/70 backdrop-blur-sm rounded-2xl overflow-hidden border 
+               border-white/10 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20'>
+                <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 via-transparent to-cyan-300/20" />
+        <div className="absolute top-20 left-20 w-96 h-96 bg-amber-500/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl animate-pulse delay-1000" />
+      </div>
+                {
+                    productsData.map(product => <div 
+              key={product.id}
+              className="group relative bg-slate-900/70 backdrop-blur-sm rounded-2xl overflow-hidden border
+               border-white/10 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-500 transform hover:-translate-y-4 "
+            >
+            
+              <div className="relative h-80 overflow-hidden">
+                <img
+                  src={product.image || "https://images.unsplash.com/photo-1523381294911-8d669ab86a83?w=600&h=700&fit=crop"}
+                  alt={product.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-70"></div>
+
+               
+                <div className="absolute top-4 left-4">
+                  <span className="bg-amber-500/20 backdrop-blur-sm text-amber-300 px-4 py-2 rounded-full text-sm font-semibold border border-amber-500/30">
+                    {product.category || "Uncategorized"}
+                  </span>
+                </div>
+              </div>
+
+          
+              <div className="p-6 text-white">
+                <h3 className="text-2xl font-bold text-amber-300 truncate">{product.title}</h3>
+
+                <div className="mt-4 space-y-3">
+           
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">Price</span>
+                    <span className="text-3xl font-black text-cyan-400">৳{product.price}</span>
+                  </div>
+
+            
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">Available</span>
+                    <span className={`text-xl font-bold ${product.quantity >= 10 ? 'text-green-400' : 'text-red-400'}`}>
+                      {product.quantity} pcs
+                    </span>
+                  </div>
+                </div>
+
+           
+                <div className="mt-6">
+                  <Link
+                    to={`/product/${product._id}`}
+                    className="w-full btn bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-lg border-none shadow-lg transform hover:scale-105 transition-all duration-300"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              </div>
+            </div>)
+                }
+            </div>
         </div>
     );
 };

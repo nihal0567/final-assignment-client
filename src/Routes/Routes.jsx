@@ -18,11 +18,13 @@ export const router = createBrowserRouter([
         children:[
             {
                 index: true,
-                Component: Home
+                Component: Home,
+                loader: ()=> fetch('http://localhost:9000/limit-products')
             },
             {
                 path: '/all-product',
-                Component: AllProduct
+                Component: AllProduct,
+                loader: ()=> fetch('http://localhost:9000/products-collection')
             },
             {
                 path: '/product-details',
@@ -51,9 +53,6 @@ export const router = createBrowserRouter([
                 Component: Register
             },
         ]
-    },
-    {
-
     },
     {
         path: '/*',

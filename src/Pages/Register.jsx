@@ -15,7 +15,6 @@ const Register = () => {
     const {email, password, name, } = data
     const profileImg= data.photoURL[0]
    
-
     console.log('after register', data);
     registerUser(email, password)
     .then(result =>{
