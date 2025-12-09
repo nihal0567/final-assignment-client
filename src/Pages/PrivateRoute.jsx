@@ -4,7 +4,7 @@ import { Navigate } from 'react-router';
 import Loading from '../Components/Loading';
 
 const PrivateRoute = ({children}) => {
-    const {user, loading} = useAuth
+    const {user, loading} = useAuth()
 
     if (loading) {
         return <Loading />

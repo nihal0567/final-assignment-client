@@ -62,7 +62,7 @@ const AllProduct = () => {
            
                 <div className="mt-6">
                   <Link
-                    to={`/product/${product._id}`}
+                    to={`/product-details/${product._id}`}
                     className="w-full btn bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-lg border-none shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     View Details

@@ -8,9 +8,9 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import AllProduct from "../Pages/AllProduct";
 import AuthLayout from "../Layout/Auth/AuthLayout";
-import PrivateRoute from "../Pages/PrivateRoute";
-import ProductDetailsPage from "../Pages/ProductDetailsPage";
+import ProductDetailsPage from "../Pages/ProductDetails";
 import Loading from "../Components/Loading";
+import PrivateRoute from "../Pages/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -30,8 +30,8 @@ export const router = createBrowserRouter([
                 hydrateFallbackElement: <Loading />
             },
             {
-                path: '/product-details',
-                element: <PrivateRoute><ProductDetailsPage/></PrivateRoute>
+                path: '/product-details/:id',
+                element: <PrivateRoute><ProductDetailsPage/></PrivateRoute>,
             },
             {
                 path: '/about',
@@ -56,6 +56,9 @@ export const router = createBrowserRouter([
                 Component: Register
             },
         ]
+    },
+    {
+        
     },
     {
         path: '/*',
