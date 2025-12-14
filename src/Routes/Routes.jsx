@@ -11,10 +11,21 @@ import AuthLayout from "../Layout/Auth/AuthLayout";
 import ProductDetailsPage from "../Pages/ProductDetails";
 import Loading from "../Components/Loading";
 import PrivateRoute from "../Pages/PrivateRoute";
+import DashboardLayout from "../Layout/DashboardLayout";
+import AddProduct from "../Layout/DashboardLayout/Manager/AddProduct";
+import MyInventory from "../Pages/DashboardPages/MyInventory";
+import BookingForm from "../Pages/BookingForm";
+import ManageProducts from "../Layout/DashboardLayout/Manager/ManageProducts";
+import PendingOrders from "../Layout/DashboardLayout/Manager/PendingOrders";
+import ApproveOrders from "../Layout/DashboardLayout/Manager/ApproveOrders";
+import MyProfile from "../Layout/DashboardLayout/Buyer/MyProfile";
+import ManageUsers from "../Layout/DashboardLayout/Admin/ManageUsers";
+import AllOrders from "../Layout/DashboardLayout/Admin/AllOrders";
 
 export const router = createBrowserRouter([
     {
         path: '/',
+        errorElement: <NotFoundPage/>,
         Component: MainLayout,
         children:[
             {
@@ -41,6 +52,10 @@ export const router = createBrowserRouter([
                 path: '/contact',
                 Component: ContactPage
             },
+            {
+                path: '/booking-form',
+                Component: BookingForm
+            },
         ]
     },
     {
@@ -58,7 +73,43 @@ export const router = createBrowserRouter([
         ]
     },
     {
-        
+        path: 'dashboard',
+        Component: DashboardLayout,
+        children:[
+            
+            {
+                path: 'add-product',
+                element: <AddProduct />
+            },
+            {
+                path: 'my-inventory',
+                element: <MyInventory />
+            },
+            {
+                path: 'manage-products',
+                element: <ManageProducts />
+            },
+            {
+                path: 'pending-orders',
+                element: <PendingOrders />
+            },
+            {
+                path: 'approve-orders',
+                element: <ApproveOrders />
+            },
+            {
+                path: 'my-profile',
+                element: <MyProfile />
+            },
+            {
+                path: 'manage-users',
+                element: <ManageUsers />
+            },
+            {
+                path: 'all-orders',
+                Component: AllOrders,
+            },
+        ]
     },
     {
         path: '/*',

@@ -6,19 +6,20 @@ import SocialLogin from "../Components/SocialLogin";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const {signInUser} = useAuth()
+  const { signInUser } = useAuth()
   const { register, handleSubmit, formState: { errors } } = useForm()
 
 
   const handleLogin = (data) => {
     console.log('form data', data);
+    
     signInUser(data.email, data.password)
-    .then(result=>{
-      console.log(result.user);
-      toast("Login Successful")
-    }) .catch(err =>{
-      console.log(err);
-    })
+      .then(result => {
+        console.log(result.user);
+        toast("Login Successful")
+      }).catch(err => {
+        console.log(err);
+      })
   };
 
   return (
@@ -82,6 +83,12 @@ const Login = () => {
             }
           </div>
 
+          {/* Role + Status Preview */}
+          {/* <div className="p-3 rounded-md bg-gray-50 border text-sm text-gray-600">
+            <p><strong> Role:</strong> Buyer</p>
+            <p><strong> Status:</strong> Pending</p>
+          </div> */}
+
           {/* 
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2 text-gray-400">
@@ -102,7 +109,7 @@ const Login = () => {
           </button>
           {/* Google */}
           <div className="flex justify-center ">
-          <SocialLogin />
+            <SocialLogin />
           </div>
         </form>
 

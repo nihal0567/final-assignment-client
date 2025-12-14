@@ -74,7 +74,8 @@ const Register = () => {
               type="text"
               {...register('name', { required: true })}
               name="name"
-              className="w-full px-5 py-4 bg-slate-800/50 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
+              className="w-full px-5 py-4 bg-slate-800/50 border border-white/20 rounded-xl text-white 
+              placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
               placeholder="Md. Rahim Khan"
             />
             {
@@ -89,7 +90,8 @@ const Register = () => {
               type="email"
               {...register('email', { required: true })}
               name="email"
-              className="w-full px-5 py-4 bg-slate-800/50 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
+              className="w-full px-5 py-4 bg-slate-800/50 border border-white/20 rounded-xl text-white 
+              placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
               placeholder="rahim@factory.com"
             />
             {

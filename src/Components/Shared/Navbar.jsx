@@ -2,18 +2,14 @@ import React from 'react';
 import { FaUserTie } from 'react-icons/fa';
 import {  Link, NavLink } from 'react-router';
 import useAuth from '../../hooks/useAuth';
+import Dropdown from './Dropdown';
+import Logo from './Logo';
 
 const Navbar = () => {
 
-    const { user, logOut } = useAuth()
+    const { user } = useAuth()
 
-    const userLogOut = () => {
-        logOut()
-            .then()
-            .catch(err => {
-                console.log(err);
-            })
-    }
+
 
     const navLinks = <>
         <li> <NavLink to="/">Home</NavLink></li>
@@ -42,7 +38,7 @@ const Navbar = () => {
                         {navLinks}
                     </ul>
                 </div>
-                <NavLink to="/" className="btn btn-ghost text-xl bg-amber-50">GOTRACK</NavLink>
+                <Logo/>
             </div>
 
             <div className="navbar-end pr-1">
@@ -54,17 +50,7 @@ const Navbar = () => {
                 </ul>
 
                 {
-                    user ? <div className="dropdown dropdown-end">
-                        <div tabIndex={0} role="button" className="btn m-1 rounded-full p-2">
-                        {
-                         user ?  <img className='h-8 w-8 rounded-full' src={user?.photoURL} alt="" /> : <FaUserTie size={24} />
-                        } 
-                        </div>
-                        <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                            <li><a onClick={userLogOut}>Log Out</a></li>
-                            <li><Link to="/dashboard">Dashboard</Link></li>
-                        </ul>
-                    </div> : ""
+                    user ? <Dropdown/> : ""
                 }
             </div>
         </div>

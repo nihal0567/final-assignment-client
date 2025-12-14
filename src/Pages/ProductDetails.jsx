@@ -5,12 +5,14 @@ import useAuth from "../hooks/useAuth";
 import Loading from "../Components/Loading";
 
 const ProductDetails = () => {
-  const {loading, user} = useAuth()
+  const { loading, user } = useAuth()
   const { id } = useParams();
   const [product, setProduct] = useState(null);
 
 
+
   const currentUser = { role: "buyer", status: "approved" }; // "buyer", "manager", null
+
 
   useEffect(() => {
     fetch(`http://localhost:9000/products-collection/${id}`)
@@ -18,7 +20,7 @@ const ProductDetails = () => {
       .then(data => {
         setProduct(data.result);
       })
- 
+
   }, [id]);
 
   if (loading) return <div className="min-h-screen bg-slate-950 text-amber-400 flex items-center justify-center text-2xl">Loading...</div>;
@@ -122,33 +124,26 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             {
-              user && <div className="pt-6 space-y-4">
-              {canOrder ? (
-                <button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-xl py-5 rounded-xl shadow-xl transform hover:scale-105 transition">
-                  Place Order / Book Now
-                </button>
-              ) : currentUser?.role === "manager" ? (
-                <div className="text-center bg-slate-800 py-5 rounded-xl">
-                  <p className="text-amber-300 font-bold">You are the Manager</p>
-                  <p className="text-gray-400 text-sm">Buyers can place orders</p>
-                </div>
-              ) : (
-                <div className="text-center bg-red-900/30 border border-red-500/50 py-5 rounded-xl">
-                  <p className="text-red-400 font-bold">Login as Buyer to Order</p>
-                  <Link to="/login" className="text-amber-400 underline">Login / Register</Link>
-                </div>
-              )}
+              user && <div className="pt-6 flex flex-col gap-2">
+                {canOrder ? (
+                  <Link to="/booking-form">
+                    <button className="w-full bg-gradient-to-r from-amber-500 cursor-pointer to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-xl py-5 rounded-xl shadow-xl 
+                    transform hover:scale-105 transition">
+                      Place Order / Book Now
+                    </button>
+                  </Link>
+                ) : ""}
 
-              {/* WhatsApp */}
-              <a
-                href={`https://wa.me/8801877123456?text=Hi! I'm interested in ${encodeURIComponent(product.name)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xl py-5 rounded-xl flex items-center justify-center gap-3 shadow-xl"
-              >
-                <FaWhatsapp size={28} /> Chat on WhatsApp
-              </a>
-            </div>
+                {/* WhatsApp */}
+                {/* <a
+                  href={`https://wa.me/8801877123456?text=Hi! I'm interested in ${encodeURIComponent(product.name)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xl py-5 rounded-xl flex items-center justify-center gap-3 shadow-xl"
+                >
+                  <FaWhatsapp size={28} /> Chat on WhatsApp
+                </a> */}
+              </div>
             }
 
             {/* Back */}
