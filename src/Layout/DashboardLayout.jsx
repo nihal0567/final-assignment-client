@@ -10,16 +10,9 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { FaUserShield } from "react-icons/fa6";
 
 const DashboardLayout = () => {
-    // const menuLinks = <>
-    // <ul className='flex flex-col gap-2.5'>
-    // <li> <NavLink to="state-in">Statisticks</NavLink></li>
-    // <li> <NavLink to="add-product">Add</NavLink></li>
-    // </ul>
-
-    // </>
     return (
         <div>
-        <div className=' flex container mx-auto'>
+        <div className=' flex container mx-auto min-h-screen'>
            
             <div className="drawer lg:drawer-open">
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -33,7 +26,7 @@ const DashboardLayout = () => {
                         <div className="px-4 text-3xl">Welcome to Our Dashboard</div>
                     </nav>
                     {/* Page content here */}
-                    <div className="p-4">
+                    <div className="">
                       <Outlet />
                     </div>
                 </div>

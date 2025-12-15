@@ -1,47 +1,91 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { toast } from 'react-toastify';
 
 const AddProduct = () => {
   const { register, handleSubmit, reset } = useForm();
   const [previewImages, setPreviewImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
+  const axiosSecure = useAxiosSecure()
+
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImageFiles(files);
-
     const previews = files.map(file => URL.createObjectURL(file));
     setPreviewImages(previews);
   };
 
+  // ================= REMOVE IMAGE =================
   const removeImage = (index) => {
-    setImageFiles(imageFiles.filter((_, i) => i !== index));
-    setPreviewImages(previewImages.filter((_, i) => i !== index));
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+    setPreviewImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const onSubmit = (data) => {
-    const formData = new FormData();
-    formData.append('productName', data.productName);
-    formData.append('productOption', data.productOption);
-    formData.append('productDesc', data.productDesc);
-    formData.append('productPrice', data.productPrice);
-    formData.append('productQuantity', data.productQuantity);
-    formData.append('minOrderQuantity', data.minOrderQuantity);
-    formData.append('paymentOption', data.paymentOption);
-    formData.append('videoURL', data.videoURL || '');
-    formData.append('showOnHome', data.showOnHome || false);
+  // ================= UPLOAD TO IMGBB =================
+  const uploadImagesToImgBB = async (imageFiles) => {
+    const uploadedImageUrls = [];
 
-    imageFiles.forEach((file) => {
-      formData.append('productImages', file);
-    });
+    for (const file of imageFiles) {
+      const formData = new FormData();
+      formData.append('image', file);
+      const img_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_API_KEY}`;
+      const res = await axios.post(img_API_URL, formData);
+      uploadedImageUrls.push(res.data.data.url);
+    }
+    return uploadedImageUrls;
+  };
 
-    console.log('Submitted Data:', Object.fromEntries(formData));
-    // এখানে API কল করবে: fetch('/api/products', { method: 'POST', body: formData })
+  // FORM SUBMIT 
+  const onSubmit = async (data) => {
+  
+    try {
+      // 1️⃣ upload images
+      const imageUrls = await uploadImagesToImgBB(imageFiles);
 
-    alert('Product added successfully!');
-    reset();
-    setPreviewImages([]);
-    setImageFiles([]);
+      // 2️⃣ prepare product data
+      const productData = {
+        productName: data.productName,
+        productOption: data.productOption,
+        productDesc: data.productDesc,
+        productPrice: data.productPrice,
+        productQuantity: data.productQuantity,
+        minOrderQuantity: data.minOrderQuantity,
+        paymentOption: data.paymentOption,
+        videoURL: data.videoURL || '',
+        showOnHome: data.showOnHome || false,
+        productImages: imageUrls,
+      };
+
+      // 3️⃣ send to backend
+      await axiosSecure.post('/add-products', productData);
+
+      toast('Product added successfully!');
+
+      // ✅ soft reset (layout stable)
+      reset({
+        productName: '',
+        productOption: '',
+        productDesc: '',
+        productPrice: '',
+        productQuantity: '',
+        minOrderQuantity: '',
+        paymentOption: '',
+        videoURL: '',
+        showOnHome: false,
+      });
+
+      setPreviewImages([]);
+      setImageFiles([]);
+
+    } catch (error) {
+      console.error(error);
+      toast('Something went wrong!');
+    } finally {
+      window.scrollTo({ top: scrollY, behavior: 'auto' });
+    }
   };
 
   return (
