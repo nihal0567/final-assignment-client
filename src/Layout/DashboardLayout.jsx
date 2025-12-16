@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router';
-import { FaCartArrowDown, FaFirstOrderAlt, FaTasks  } from 'react-icons/fa';
+import { FaCalculator, FaCartArrowDown, FaFirstOrderAlt, FaTasks  } from 'react-icons/fa';
 import Footer from '../Pages/Footer';
 import { MdInventory2 } from "react-icons/md";
 import { FaFirstOrder } from "react-icons/fa";
@@ -52,7 +52,7 @@ const DashboardLayout = () => {
                             
                             <Link to="manage-users">
                             <li>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add Products">
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Users">
                                     {/* Product icon */}
                                     <FaUserShield />
                                     <span className="is-drawer-close:hidden">Manage Users</span>
@@ -65,6 +65,15 @@ const DashboardLayout = () => {
                                     {/* Product icon */}
                                     <FaCartArrowDown />
                                     <span className="is-drawer-close:hidden">Add Products</span>
+                                </button>
+                            </li>
+                            </Link>
+                            <Link to="all-products">
+                            <li>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All Products">
+                                    {/* Product icon */}
+                                    <FaCalculator />
+                                    <span className="is-drawer-close:hidden">All Products</span>
                                 </button>
                             </li>
                             </Link>

@@ -64,18 +64,7 @@ const AddProduct = () => {
 
       toast('Product added successfully!');
 
-      // ✅ soft reset (layout stable)
-      reset({
-        productName: '',
-        productOption: '',
-        productDesc: '',
-        productPrice: '',
-        productQuantity: '',
-        minOrderQuantity: '',
-        paymentOption: '',
-        videoURL: '',
-        showOnHome: false,
-      });
+      reset()
 
       setPreviewImages([]);
       setImageFiles([]);
@@ -83,9 +72,7 @@ const AddProduct = () => {
     } catch (error) {
       console.error(error);
       toast('Something went wrong!');
-    } finally {
-      window.scrollTo({ top: scrollY, behavior: 'auto' });
-    }
+    } 
   };
 
   return (
@@ -229,7 +216,7 @@ const AddProduct = () => {
 
                 {/* Image Previews */}
                 {previewImages.length > 0 && (
-                  <div className="mt-6 grid grid-cols-3 gap-4">
+                  <div className="mt-6 grid grid-cols-4 gap-4">
                     {previewImages.map((src, i) => (
                       <div key={i} className="relative group">
                         <img src={src} alt="preview" className="w-full h-32 object-cover rounded-xl shadow-lg" />

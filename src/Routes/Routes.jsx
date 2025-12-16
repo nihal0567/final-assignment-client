@@ -21,6 +21,7 @@ import ApproveOrders from "../Layout/DashboardLayout/Manager/ApproveOrders";
 import MyProfile from "../Layout/DashboardLayout/Buyer/MyProfile";
 import ManageUsers from "../Layout/DashboardLayout/Admin/ManageUsers";
 import AllOrders from "../Layout/DashboardLayout/Admin/AllOrders";
+import AllProducts from "../Layout/DashboardLayout/Admin/AllProducts";
 
 export const router = createBrowserRouter([
     {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
         Component: DashboardLayout,
         children:[
             
+            {
+                path: 'all-products',
+                element: <AllProducts />
+            },
             {
                 path: 'add-product',
                 element: <AddProduct />
