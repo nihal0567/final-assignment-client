@@ -37,7 +37,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-6">
           {productsData.map(product => (
             <div
-              key={product.id}
+              key={product._id}
               className="group relative bg-slate-900/70 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-500 transform hover:-translate-y-4"
             >
 
@@ -61,7 +61,8 @@ const Home = () => {
 
               {/* Content */}
               <div className="p-6 text-white">
-                <h3 className="text-2xl font-bold text-amber-300 truncate">{product.productName}</h3>
+                <h3 className="text-xl font-bold text-white truncate">{product.productName}</h3>
+                <h3 className="text-[16px] font-bold text-amber-200 mt-2 truncate">{product.productDesc}</h3>
 
                 <div className="mt-4 space-y-3">
                   <div className="flex items-center justify-between">

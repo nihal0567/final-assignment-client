@@ -5,10 +5,12 @@ import useAuth from "../hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin";
 import { toast } from "react-toastify";
 import axios from "axios";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Register = () => {
   const { register, handleSubmit, formState:{errors}} = useForm()
   const {registerUser,updateUserProfile  } = useAuth();
+  const axiosSecure = useAxiosSecure()
 
 
   const handleRegister = (data) => {
@@ -18,14 +20,26 @@ const Register = () => {
     console.log('after register', data);
     registerUser(email, password)
     .then(result =>{
-      console.log(result);
       const formData = new FormData()
       formData.append('image', profileImg)
       const img_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_API_KEY}`
       axios.post(img_API_URL, formData)
       .then(res=>{
+        const photoURL = res.data.data.url
         console.log(res.data.data.url);
-        const userProfile = {displayName: name, photoURL: res.data.data.url}
+        const userInfo ={
+          email: email,
+          displayName: name,
+          photoURL: photoURL
+        }
+        axiosSecure.post('/users', userInfo)
+        .then(res =>{
+          if (res.data.insertedId) {
+            console.log('user created in the db');
+          }
+        })
+        //create user in the database
+        const userProfile = {displayName: name, photoURL: photoURL}
         updateUserProfile(userProfile)
         .then(()=>{
           toast('Register Successful')
