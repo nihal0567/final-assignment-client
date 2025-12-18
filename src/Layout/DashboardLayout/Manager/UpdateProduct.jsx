@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { toast } from 'react-toastify';
 
-const AddProduct = () => {
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import axios from 'axios';
+
+const UpdateProduct = () => {
   const { register, handleSubmit, reset } = useForm();
   const [previewImages, setPreviewImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
@@ -79,7 +80,7 @@ const AddProduct = () => {
     <div className="min-h-screen bg-slate-950 py-12 px-6">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-black text-center text-white mb-12">
-          Add New <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-cyan-400">Product</span>
+          Update Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-cyan-400">Product</span>
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="bg-slate-900/70 backdrop-blur-md rounded-3xl shadow-2xl border border-white/10 p-8 md:p-12">
@@ -262,4 +263,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

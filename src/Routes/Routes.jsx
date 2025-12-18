@@ -22,6 +22,7 @@ import MyProfile from "../Layout/DashboardLayout/Buyer/MyProfile";
 import ManageUsers from "../Layout/DashboardLayout/Admin/ManageUsers";
 import AllOrders from "../Layout/DashboardLayout/Admin/AllOrders";
 import AllProducts from "../Layout/DashboardLayout/Admin/AllProducts";
+import UpdateProduct from "../Layout/DashboardLayout/Manager/UpdateProduct";
 
 export const router = createBrowserRouter([
     {
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
             {
                 path: '/all-product',
                 Component: AllProduct,
-                loader: ()=> fetch('http://localhost:9000/products-collection'),
+                loader: ()=> fetch('http://localhost:9000/products'),
                 hydrateFallbackElement: <Loading />
             },
             {
@@ -93,6 +94,10 @@ export const router = createBrowserRouter([
             {
                 path: 'manage-products',
                 element: <ManageProducts />
+            },
+            {
+                path: 'update-products/:id',
+                element: <UpdateProduct />
             },
             {
                 path: 'pending-orders',

@@ -44,8 +44,8 @@ const Home = () => {
               {/* Image Section */}
               <div className="relative h-80 overflow-hidden">
                 <img
-                  src={product.image || "https://images.unsplash.com/photo-1523381294911-8d669ab86a83?w=600&h=700&fit=crop"}
-                  alt={product.title}
+                  src={product.productImages || "https://images.unsplash.com/photo-1523381294911-8d669ab86a83?w=600&h=700&fit=crop"}
+                  alt={product.productName}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
 
@@ -54,25 +54,25 @@ const Home = () => {
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4">
                   <span className="bg-amber-500/20 backdrop-blur-sm text-amber-300 px-4 py-2 rounded-full text-sm font-semibold border border-amber-500/30">
-                    {product.category || "Garments"}
+                    {product.productOption || "Garments"}
                   </span>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6 text-white">
-                <h3 className="text-2xl font-bold text-amber-300 truncate">{product.title}</h3>
+                <h3 className="text-2xl font-bold text-amber-300 truncate">{product.productName}</h3>
 
                 <div className="mt-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400 text-sm">Price (per piece)</span>
-                    <span className="text-3xl font-black text-cyan-400">৳{product.price}</span>
+                    <span className="text-3xl font-black text-cyan-400">৳{product.productPrice}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400 text-sm">Available</span>
-                    <span className={`text-xl font-bold ${product.quantity >= 10 ? 'text-green-400' : 'text-red-400'}`}>
-                      {product.quantity} pcs
+                    <span className={`text-xl font-bold ${product.quantity >= 100 ? 'text-green-400' : 'text-red-400'}`}>
+                      {product.productQuantity} pcs
                     </span>
                   </div>
                 </div>
