@@ -23,6 +23,9 @@ import ManageUsers from "../Layout/DashboardLayout/Admin/ManageUsers";
 import AllOrders from "../Layout/DashboardLayout/Admin/AllOrders";
 import AllProducts from "../Layout/DashboardLayout/Admin/AllProducts";
 import UpdateProduct from "../Layout/DashboardLayout/Manager/UpdateProduct";
+import PaymentSuccess from "../Pages/Payments/PaymentSuccess";
+import MyOrders from "../Layout/DashboardLayout/Buyer/MyOrders";
+
 
 export const router = createBrowserRouter([
     {
@@ -119,6 +122,19 @@ export const router = createBrowserRouter([
                 path: 'all-orders',
                 Component: AllOrders,
             },
+            {
+                path: 'payment-success',
+                Component: PaymentSuccess,
+            },
+            {
+                path: 'payment-cancel',
+                Component: PaymentSuccess,
+            },
+            {
+                path: 'my-orders',
+                Component: MyOrders,
+            },
+          
         ]
     },
     {
