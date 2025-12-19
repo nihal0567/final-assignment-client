@@ -55,8 +55,8 @@ export const router = createBrowserRouter([
                 Component: ContactPage
             },
             {
-                path: '/booking-form',
-                Component: BookingForm
+                path: '/booking-form/:id',
+                element: <PrivateRoute><BookingForm/></PrivateRoute>
             },
         ]
     },

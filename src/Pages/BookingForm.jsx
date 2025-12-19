@@ -1,131 +1,229 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router';
+import { useForm } from 'react-hook-form';
 import useAuth from '../hooks/useAuth';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+import Loading from '../Components/Loading';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const BookingForm = () => {
-    const {user} = useAuth()
-    return (
+  const { id } = useParams();
+  const { user, loading } = useAuth();
+  const axiosSecure = useAxiosSecure();
+//  const navigate = useNavigate();
+
+  const [product, setProduct] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm();
+
+  const quantity = watch('quantity');
+
+  // Fetch product by ID
+  useEffect(() => {
+    axiosSecure.get(`/products/${id}`)
+      .then(res => setProduct(res.data.result || res.data))
+      .catch(err => {
+        console.error('Failed to fetch product:', err);
+        setProduct(null);
+      });
+  }, [id, axiosSecure]);
+
+  // Auto-calculate total price based on quantity and paymentOption
+  useEffect(() => {
+    if (quantity && product) {
+      const pricePerUnit = product.productPrice;
+      let orderPrice = quantity * pricePerUnit;
+      if (product.paymentOption === 'advance') {
+        orderPrice = orderPrice / 2; // half payment if advance
+      }
+      setTotalPrice(orderPrice);
+    } else {
+      setTotalPrice(0);
+    }
+  }, [quantity, product]);
+
+  // Safe min/max quantity
+  const minOrder = product && product.minOrderQuantity > 0 ? product.minOrderQuantity : 1;
+  const maxOrder = product && product.productQuantity ? product.productQuantity : 999999;
+
+  const onSubmit = (data) => {
+    const orderData = {
+      productId: product._id,
+      productTitle: product.productName,
+      unitPrice: product.productPrice,
+      orderQuantity: Number(data.quantity),
+      orderPrice: totalPrice,
+      email: user.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      contactNumber: data.contactNumber,
+      deliveryAddress: data.deliveryAddress,
+      notes: data.notes,
+      status: 'pending',
+      paymentOption: product.paymentOption
+    };
+    console.log(orderData);
+    Swal.fire({
+      title: "Do you want to save the Confirm the order?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      denyButtonText: `No. I do not want`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.post('/orders', orderData)
+          .then(res => {
+            console.log(res.data);
+            if (res.data.insertedId) {
+              toast('Order placed successfully!');
+          //    navigate('/orders'); // redirect to order page
+            } else {
+              toast('Failed to place order. Please try again.');
+            }
+          })
+          .catch(err => {
+            toast.error('Order submission error:', err);
+          });
+        Swal.fire("Confirmed!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Order not done yet", "", "info");
+      }
+    });
+
+
+  };
+
+  if (loading) return <Loading />;
+  if (!product) return <p className="text-center text-white mt-20">Loading product details...</p>;
+
+  return (
     <div className="min-h-screen bg-slate-950 text-white py-12 px-6">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-black text-center mb-12">
-          Book Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-cyan-400">Order</span>
+        <h1 className="text-4xl font-black text-center mb-12">
+          Book Your <span className="text-amber-400">Order</span>
         </h1>
 
-        <div className="bg-slate-900/70 backdrop-blur-md rounded-3xl shadow-2xl border border-white/10 p-8 md:p-12">
-          <form  className="space-y-8">
+        <div className="bg-slate-900/70 rounded-3xl p-8 md:p-12">
 
-            {/* Read-only Product Info */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-8 border-b border-white/10">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+
+            {/* Product Info */}
+            <div className="grid md:grid-cols-3 gap-6 border-b pb-6 border-white/10">
               <div>
-                <label className="text-gray-400 text-sm">Product</label>
-                <p className="text-xl font-bold text-amber-300"></p>
+                <label className="text-sm text-gray-400">Product</label>
+                <p className="text-xl font-bold text-amber-300">{product.productName}</p>
+                {product.productImages && product.productImages.length > 0 && (
+                  <img
+                    src={product.productImages[0]}
+                    alt={product.productName}
+                    className="w-32 h-32 object-cover rounded mt-2"
+                  />
+                )}
               </div>
+
               <div>
-                <label className="text-gray-400 text-sm">Unit Price</label>
-                <p className="text-xl font-bold text-cyan-400">৳</p>
+                <label className="text-sm text-gray-400">Payment Info</label>
+                <p className="text-xl font-bold text-cyan-400">
+                  {product.paymentOption === 'advance'
+                    ? `${(product.productPrice / 2).toFixed(2)}`
+                    : `${product.productPrice}`}
+                </p>
               </div>
+
               <div>
-                <label className="text-gray-400 text-sm">Buyer Email</label>
-                <input defaultValue={user.email}
-                  type="email"
+                <label className="text-sm text-gray-400">Email</label>
+                <input
+                  value={user.email}
                   readOnly
-                  className="w-full bg-slate-800/50 px-5 py-3 rounded-xl text-gray-300"
+                  className="input input-bordered w-full bg-slate-800/60"
                 />
               </div>
             </div>
 
-            {/* Personal Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-gray-300 mb-2">First Name *</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  required
-                  className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-300 mb-2">Last Name *</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  required
-                  className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition"
-                />
-              </div>
+            {/* Name */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <input
+                {...register('firstName', { required: 'First name required' })}
+                placeholder="First Name"
+                className="input input-bordered w-full bg-slate-800/60"
+              />
+              <input
+                {...register('lastName', { required: 'Last name required' })}
+                placeholder="Last Name"
+                className="input input-bordered w-full bg-slate-800/60"
+              />
             </div>
 
-            {/* Quantity & Total Price */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Quantity & Total */}
+            <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-gray-300 mb-2">
+                <label className="text-sm text-gray-400">
+                  Quantity (Min {minOrder}, Max {maxOrder})
                 </label>
                 <input
                   type="number"
-                  name="quantity"
-                  required
-                  className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition"
+                  {...register('quantity', {
+                    required: 'Quantity required',
+                    min: { value: minOrder, message: `Minimum order is ${minOrder}` },
+                    max: { value: maxOrder, message: `Only ${maxOrder} available` }
+                  })}
+                  className="input input-bordered w-full bg-slate-800/60"
                 />
+                {errors.quantity && <p className="text-red-400 text-sm mt-1">{errors.quantity.message}</p>}
               </div>
+
               <div>
-                <label className="block text-gray-300 mb-2">Total Order Price</label>
+                <label className="text-sm text-gray-400">Total Price</label>
                 <input
-                  type="text"
                   readOnly
-                  className="w-full px-6 py-4 bg-slate-800/80 rounded-xl text-2xl font-bold text-cyan-400"
+                  value={`৳ ${totalPrice.toFixed(2)}`}
+                  className="input input-bordered w-full bg-slate-800/80 text-cyan-400 font-bold"
                 />
               </div>
             </div>
 
-            {/* Contact & Address */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-gray-300 mb-2">Contact Number *</label>
-                <input
-                  type="tel"
-                  name="contactNumber"
-                  required
-                  className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-300 mb-2">Delivery Address *</label>
-                <textarea
-                  name="deliveryAddress"
-                  rows="3"
-                  required
-                  className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition resize-none"
-                ></textarea>
-              </div>
-            </div>
-
-            {/* Additional Notes */}
-            <div>
-              <label className="block text-gray-300 mb-2">Additional Notes / Instructions (Optional)</label>
+            {/* Contact */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <input
+                {...register('contactNumber', { required: 'Contact number required' })}
+                placeholder="Contact Number"
+                className="input input-bordered w-full bg-slate-800/60"
+              />
               <textarea
-                name="notes"
-                rows="4"
-                placeholder="Color preference, size breakdown, special packaging, etc."
-                className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition resize-none"
-              ></textarea>
+                {...register('deliveryAddress', { required: 'Address required' })}
+                placeholder="Delivery Address"
+                rows="3"
+                className="textarea textarea-bordered w-full bg-slate-800/60"
+              />
             </div>
 
-            {/* Submit Button */}
-            <div className="pt-8 flex flex-col sm:flex-row gap-4">
-              <button
-                type="submit"
-                className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold text-xl py-5 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
-              >
+            {/* Notes */}
+            <textarea
+              {...register('notes')}
+              placeholder="Additional notes (optional)"
+              rows="4"
+              className="textarea textarea-bordered w-full bg-slate-800/60"
+            />
+
+            {/* Buttons */}
+            <div className="flex gap-4 pt-6">
+              <button className="btn btn-warning flex-1 w-full text-lg font-bold">
                 Confirm Booking
               </button>
-              <Link
-                className="flex-1 text-center btn btn-outline border-2 border-white/30 hover:bg-white hover:text-slate-900 font-bold text-xl py-5 rounded-xl"
-              >
+              {/* <Link to="/" className="btn btn-outline flex-1 text-lg font-bold">
                 Cancel
-              </Link>
+              </Link> */}
             </div>
+
           </form>
+
         </div>
       </div>
     </div>

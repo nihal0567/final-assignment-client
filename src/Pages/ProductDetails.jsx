@@ -126,7 +126,7 @@ const ProductDetails = () => {
             {
               user && <div className="pt-6 flex flex-col gap-2">
                 {canOrder ? (
-                  <Link to="/booking-form">
+                  <Link to={`/booking-form/${product._id}`}>
                     <button className="w-full bg-gradient-to-r from-amber-500 cursor-pointer to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-xl py-5 rounded-xl shadow-xl 
                     transform hover:scale-105 transition">
                       Place Order / Book Now
