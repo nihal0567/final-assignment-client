@@ -13,7 +13,6 @@ import Loading from "../Components/Loading";
 import PrivateRoute from "../Pages/PrivateRoute";
 import DashboardLayout from "../Layout/DashboardLayout";
 import AddProduct from "../Layout/DashboardLayout/Manager/AddProduct";
-import MyInventory from "../Pages/DashboardPages/MyInventory";
 import BookingForm from "../Pages/BookingForm";
 import ManageProducts from "../Layout/DashboardLayout/Manager/ManageProducts";
 import PendingOrders from "../Layout/DashboardLayout/Manager/PendingOrders";
@@ -25,29 +24,37 @@ import AllProducts from "../Layout/DashboardLayout/Admin/AllProducts";
 import UpdateProduct from "../Layout/DashboardLayout/Manager/UpdateProduct";
 import PaymentSuccess from "../Pages/Payments/PaymentSuccess";
 import MyOrders from "../Layout/DashboardLayout/Buyer/MyOrders";
+import TrackOrder from "../Layout/DashboardLayout/Buyer/TrackOrder";
+import Profile from "../Layout/DashboardLayout/Buyer/Profile";
+import Statistics from "../Layout/DashboardLayout/Statistics";
+import AdminRoute from "../Layout/DashboardLayout/Admin/AdminRoute";
 
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        errorElement: <NotFoundPage/>,
+        errorElement: <NotFoundPage />,
         Component: MainLayout,
-        children:[
+        children: [
             {
                 index: true,
                 Component: Home,
-                loader: ()=> fetch('http://localhost:9000/limit-products'),
+                loader: () => fetch('http://localhost:9000/limit-products'),
                 hydrateFallbackElement: <Loading />
             },
             {
                 path: '/all-product',
                 Component: AllProduct,
-                loader: ()=> fetch('http://localhost:9000/products'),
+                loader: () => fetch('http://localhost:9000/products'),
                 hydrateFallbackElement: <Loading />
             },
             {
                 path: '/product-details/:id',
-                element: <PrivateRoute><ProductDetailsPage/></PrivateRoute>,
+                element: <PrivateRoute><ProductDetailsPage /></PrivateRoute>,
+            },
+            {
+                path: 'add-product',
+                element: <AddProduct />
             },
             {
                 path: '/about',
@@ -59,14 +66,14 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/booking-form/:id',
-                element: <PrivateRoute><BookingForm/></PrivateRoute>
+                element: <PrivateRoute><BookingForm /></PrivateRoute>
             },
         ]
     },
     {
         path: '/',
         Component: AuthLayout,
-        children:[
+        children: [
             {
                 path: 'login',
                 Component: Login
@@ -80,23 +87,20 @@ export const router = createBrowserRouter([
     {
         path: 'dashboard',
         Component: DashboardLayout,
-        children:[
-            
+        children: [
+
             {
                 path: 'all-products',
                 element: <AllProducts />
             },
+            
             {
-                path: 'add-product',
-                element: <AddProduct />
-            },
-            {
-                path: 'my-inventory',
-                element: <MyInventory />
+                path: 'statistics',
+                element: <Statistics />
             },
             {
                 path: 'manage-products',
-                element: <ManageProducts />
+                element: <AdminRoute><ManageProducts /></AdminRoute>
             },
             {
                 path: 'update-products/:id',
@@ -134,7 +138,14 @@ export const router = createBrowserRouter([
                 path: 'my-orders',
                 Component: MyOrders,
             },
-          
+            {
+                path: "track-order/:orderId",
+                element: <TrackOrder />,
+            },
+            {
+                path: 'profile',
+                Component: Profile,
+            },
         ]
     },
     {

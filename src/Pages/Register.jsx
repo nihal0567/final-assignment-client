@@ -8,52 +8,50 @@ import axios from "axios";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Register = () => {
-  const { register, handleSubmit, formState:{errors}} = useForm()
-  const {registerUser,updateUserProfile  } = useAuth();
+  const { register, handleSubmit, formState: { errors } } = useForm()
+  const { registerUser, updateUserProfile } = useAuth();
   const axiosSecure = useAxiosSecure()
 
 
   const handleRegister = (data) => {
-    const {email, password, name, } = data
-    const profileImg= data.photoURL[0]
-   
+    const { email, password, name, } = data
+    const profileImg = data.photoURL[0]
+
     console.log('after register', data);
     registerUser(email, password)
-    .then(result =>{
-      const formData = new FormData()
-      formData.append('image', profileImg)
-      const img_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_API_KEY}`
-      axios.post(img_API_URL, formData)
-      .then(res=>{
-        const photoURL = res.data.data.url
-        console.log(res.data.data.url);
-        const userInfo ={
-          email: email,
-          displayName: name,
-          photoURL: photoURL
-        }
-        axiosSecure.post('/users', userInfo)
-        .then(res =>{
-          if (res.data.insertedId) {
-            console.log('user created in the db');
-          }
-        })
-        //create user in the database
-        const userProfile = {displayName: name, photoURL: photoURL}
-        updateUserProfile(userProfile)
-        .then(()=>{
-          toast('Register Successful')
-          console.log('user pf update done');
-        })
-        .catch(err=>{
-          console.log(err);
-        })
+      .then(result => {
+        const formData = new FormData()
+        formData.append('image', profileImg)
+        const img_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_API_KEY}`
+        axios.post(img_API_URL, formData)
+          .then(res => {
+            const photoURL = res.data.data.url
+            const userInfo = {
+              email: email,
+              displayName: name,
+              photoURL: photoURL,
+            }
+            axiosSecure.post('/users', userInfo)
+              .then(res => {
+                if (res.data.insertedId) {
+                  console.log('user created in the db');
+                }
+              })
+            //create user in the database
+            const userProfile = { displayName: name, photoURL: photoURL }
+            updateUserProfile(userProfile)
+              .then(() => {
+                toast('Register Successful')
+              })
+              .catch(err => {
+                toast.error(err);
+              })
+          })
+        console.log(result.user);
+
+      }).catch(err => {
+        console.log(err);
       })
-      console.log(result.user);
-      
-    }) .catch(err=>{
-      console.log(err);
-    })
   }
 
 
@@ -93,7 +91,7 @@ const Register = () => {
               placeholder="Md. Rahim Khan"
             />
             {
-              errors.name?.type==='required' && <p className="text-red-400">set name</p>
+              errors.name?.type === 'required' && <p className="text-red-400">set name</p>
             }
           </div>
 
@@ -109,7 +107,7 @@ const Register = () => {
               placeholder="rahim@factory.com"
             />
             {
-              errors.email?.type==='required' && <p className="text-red-400">set email</p>
+              errors.email?.type === 'required' && <p className="text-red-400">set email</p>
             }
           </div>
 
@@ -124,7 +122,7 @@ const Register = () => {
               placeholder="https://example.com/photo.jpg"
             />
             {
-              errors.photoURL?.type==='required' && <p className="text-red-400">set photoURL</p>
+              errors.photoURL?.type === 'required' && <p className="text-red-400">set photoURL</p>
             }
           </div>
 
@@ -147,14 +145,14 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
             <input
               type="password"
-              {...register('password', { required: true, minLength: 6,pattern: /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/})}
+              {...register('password', { required: true, minLength: 6, pattern: /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/ })}
               name="password"
               className="w-full px-5 py-4 bg-slate-800/50 border border-white/20 rounded-xl text-white
               placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
               placeholder="••••••••"
             />
             {
-              errors.password?.type==='required' && <p className="text-red-400">set your password</p>
+              errors.password?.type === 'required' && <p className="text-red-400">set your password</p>
             }
             {
               errors.password?.type === 'minLength' && <p className="text-red-400">Length at least 6 character & one upperCase & one lowerCase</p>
@@ -176,7 +174,7 @@ const Register = () => {
 
           {/* Google */}
           <div className="flex justify-center">
-           <SocialLogin />
+            <SocialLogin />
           </div>
         </form>
 
