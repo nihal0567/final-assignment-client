@@ -4,12 +4,25 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router';
+import Loading from '../../../Components/Loading';
 
 const UpdateProduct = () => {
   const { register, handleSubmit, reset } = useForm();
   const [previewImages, setPreviewImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const axiosSecure = useAxiosSecure()
+  const { id } = useParams()
+   // ✅ SINGLE PRODUCT FETCH
+  const { data: products = {}, isLoading, isPending } = useQuery({
+    queryKey: ['product', id],
+    enabled: !!id,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/products/${id}`);
+      return res.data;
+    }
+  });
 
 
   const handleImageChange = (e) => {
@@ -61,9 +74,9 @@ const UpdateProduct = () => {
       };
 
       // 3️⃣ send to backend
-      await axiosSecure.post('/products', productData);
+      await axiosSecure.patch(`/products/${id}`, productData);
 
-      toast('Product added successfully!');
+      toast('Product update successfully!');
 
       reset()
 
@@ -76,8 +89,13 @@ const UpdateProduct = () => {
     } 
   };
 
+  if (isLoading || isPending) {
+    return <Loading />
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 py-12 px-6">
+      
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-black text-center text-white mb-12">
           Update Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-cyan-400">Product</span>
@@ -92,9 +110,11 @@ const UpdateProduct = () => {
               {/* Product Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Product Name *</label>
+                {console.log(products.result)}
                 <input
                   {...register('productName', { required: true })}
                   type="text"
+                  defaultValue={products.result.productName}
                   placeholder="Enter product name"
                   className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition"
                 />
@@ -105,9 +125,10 @@ const UpdateProduct = () => {
                 <label className="block text-sm font-medium text-gray-300 mb-2">Category *</label>
                 <select
                   {...register('productOption', { required: true })}
+                  defaultValue={products.result.productOption}
                   className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition cursor-pointer"
                 >
-                  <option value="">Select category</option>
+                  <option  value="">Select category</option>
                   <option value="shirt">Shirt</option>
                   <option value="pant">Pant</option>
                   <option value="jacket">Jacket</option>
@@ -124,6 +145,7 @@ const UpdateProduct = () => {
                 <textarea
                   {...register('productDesc', { required: true })}
                   rows="6"
+                  defaultValue={products.result.productDesc}
                   placeholder="Write detailed description..."
                   className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition resize-none"
                 ></textarea>
@@ -131,7 +153,6 @@ const UpdateProduct = () => {
 
             </div>
 
-            {/* RIGHT SIDE */}
             <div className="space-y-8">
 
               {/* Price / Qty / MOQ */}
@@ -141,6 +162,7 @@ const UpdateProduct = () => {
                   <input
                     {...register('productPrice', { required: true, valueAsNumber: true })}
                     type="number"
+                    defaultValue={products.result.productPrice}
                     placeholder="Price"
                     className="w-full px-5 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-amber-500 transition"
                   />
@@ -150,6 +172,7 @@ const UpdateProduct = () => {
                   <input
                     {...register('productQuantity', { required: true, valueAsNumber: true })}
                     type="number"
+                    defaultValue={products.result.productQuantity}
                     placeholder="Stock"
                     className="w-full px-5 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-amber-500 transition"
                   />
@@ -159,6 +182,7 @@ const UpdateProduct = () => {
                   <input
                     {...register('minOrderQuantity', { required: true, valueAsNumber: true })}
                     type="number"
+                    defaultValue={products.result.minOrderQuantity}
                     placeholder="Min order"
                     className="w-full px-5 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-amber-500 transition"
                   />
@@ -169,10 +193,11 @@ const UpdateProduct = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Payment Option *</label>
                 <select
+                defaultValue={products.result.paymentOption}
                   {...register('paymentOption', { required: true })}
                   className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition cursor-pointer"
                 >
-                  <option value="">Select payment method</option>
+                  <option  >Select payment method</option>
                   <option value="advance">PayFirst</option>
                   <option value="cod">Cash on Delivery</option>
                 </select>
@@ -185,6 +210,7 @@ const UpdateProduct = () => {
                 </label>
                 <input
                   {...register('videoURL')}
+                  defaultValue={products.result.productImages}
                   type="url"
                   placeholder="https://www.youtube.com/embed/..."
                   className="w-full px-6 py-4 bg-slate-800/60 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/30 transition"
@@ -252,10 +278,11 @@ const UpdateProduct = () => {
                 type="submit"
                 className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-xl py-5 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
               >
-                Save Product
+                Update Product
               </button>
 
             </div>
+            {/* RIGHT SIDE */}
           </div>
         </form>
       </div>

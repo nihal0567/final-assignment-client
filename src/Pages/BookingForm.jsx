@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router'; 
+import { useParams } from 'react-router'; 
 import { useForm } from 'react-hook-form';
 import useAuth from '../hooks/useAuth';
 import useAxiosSecure from '../hooks/useAxiosSecure';
@@ -11,7 +11,7 @@ const BookingForm = () => {
   const { id } = useParams();
   const { user, loading } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const navigate = useNavigate();
+
 
   const [product, setProduct] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -27,15 +27,12 @@ const BookingForm = () => {
 
   // Fetch product by ID
   useEffect(() => {
-    axiosSecure
-      .get(`/products/${id}`)
-      .then((res) => {
-        
+    axiosSecure.get(`/products/${id}`).then((res) => {
         setProduct(res.data.result || res.data);
       })
       .catch((err) => {
         console.error('Failed to fetch product:', err);
-        toast.error('প্রোডাক্ট লোড করতে সমস্যা হয়েছে');
+        toast.error('Error Product on post');
         setProduct(null);
       });
   }, [id, axiosSecure]);
@@ -61,12 +58,13 @@ const BookingForm = () => {
   const maxOrder =
     product && product.productQuantity ? product.productQuantity : 999999;
 
-  const onSubmit = async (data) => {
+  const onPayment = async (data) => {
     const orderData = {
       productId: product._id,
       productTitle: product.productName,
-      unitPrice: product.productPrice,
-      orderQuantity: Number(data.quantity),
+      productImage: product.productImages[0],
+      productPrice: product.productPrice,
+      minOrderQuantity: Number(data.quantity),
       orderPrice: totalPrice,
       email: user.email,
       firstName: data.firstName,
@@ -78,7 +76,14 @@ const BookingForm = () => {
       paymentOption: product.paymentOption,
       paymentStatus: product.paymentOption === 'cod' ? 'cod' : 'pending',
       createdAt: new Date(),
+      buyer: {
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL
+      }
     };
+    console.log("order form", orderData);
+   
 
     // Swal confirm
     const confirmResult = await Swal.fire({
@@ -97,29 +102,11 @@ const BookingForm = () => {
     }
 
     try {
-      // 1. Save order in DB first
-      const orderRes = await axiosSecure.post('/orders', orderData);
+      // 1. Advance/Stripe payment case
+      const sessionRes = await axiosSecure.post('/create-checkout-session', orderData);
 
-      if (!orderRes.data.insertedId) {
-        throw new Error('অর্ডার সেভ করতে ব্যর্থ');
-      }
-
-      const insertedId = orderRes.data.insertedId;
-
-      // 2. COD case
-      if (product.paymentOption === 'cod') {
-        toast.success('অর্ডার সফলভাবে প্লেস হয়েছে (ক্যাশ অন ডেলিভারি)');
-        Swal.fire('সফল!', 'আপনার অর্ডার কনফার্ম হয়েছে', 'success');
-        navigate('/dashboard/my-orders'); // তোমার My Orders পেজ
-        return;
-      }
-
-      // 3. Advance/Stripe payment case
-      const sessionRes = await axiosSecure.post('/create-checkout-session', {
-        ...orderData,
-        orderId: insertedId,
-      });
-
+      console.log(sessionRes.data.url, orderData);
+   //  return
       if (sessionRes.data.url) {
         toast.info('পেমেন্ট পেজে রিডাইরেক্ট করা হচ্ছে...');
         window.location.href = sessionRes.data.url; 
@@ -129,6 +116,23 @@ const BookingForm = () => {
 
       // Swal success (পেমেন্ট complete হলে success page থেকে আসবে)
       Swal.fire('সফল!', 'অর্ডার কনফার্ম হয়েছে', 'success');
+      
+      // 2. COD case
+      if (product.paymentOption === 'cod') {
+        toast.success('Order has been placed (Cash on Delivery)');
+        Swal.fire('Success!', 'This Order has been Confirmed', 'success');
+        
+        return;
+      }
+
+    // //  3. Save order in DB first
+    //  const orderRes = await axiosSecure.post('/orders', orderData);
+
+    //   if (!orderRes.data.insertedId) {
+    //     toast.error('অর্ডার সেভ করতে ব্যর্থ');
+    //   }
+
+     
     } catch (err) {
       console.error('Order submission error:', err);
       toast.error('অর্ডার প্লেস করতে সমস্যা হয়েছে: ' + (err.message || ''));
@@ -138,7 +142,7 @@ const BookingForm = () => {
   if (loading) return <Loading />;
   if (!product)
     return (
-      <p className="text-center text-white mt-20">প্রোডাক্টের বিস্তারিত লোড হচ্ছে...</p>
+      <p className="text-center text-white mt-20">No Product available.... </p>
     );
 
   return (
@@ -149,13 +153,13 @@ const BookingForm = () => {
         </h1>
 
         <div className="bg-slate-900/70 rounded-3xl p-8 md:p-12">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onPayment)} className="space-y-8">
             {/* Product Info */}
             <div className="grid md:grid-cols-3 gap-6 border-b pb-6 border-white/10">
               <div>
                 <label className="text-sm text-gray-400">Product</label>
                 <p className="text-xl font-bold text-amber-300">
-                  {product.productName}
+                {product.productName}
                 </p>
                 {product.productImages?.length > 0 && (
                   <img

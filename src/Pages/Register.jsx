@@ -1,6 +1,6 @@
 
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin";
 import { toast } from "react-toastify";
@@ -11,13 +11,14 @@ const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const { registerUser, updateUserProfile } = useAuth();
   const axiosSecure = useAxiosSecure()
+  const navigate = useNavigate()
 
 
   const handleRegister = (data) => {
     const { email, password, name, } = data
     const profileImg = data.photoURL[0]
 
-    console.log('after register', data);
+
     registerUser(email, password)
       .then(result => {
         const formData = new FormData()
@@ -26,11 +27,13 @@ const Register = () => {
         axios.post(img_API_URL, formData)
           .then(res => {
             const photoURL = res.data.data.url
+
             const userInfo = {
               email: email,
               displayName: name,
               photoURL: photoURL,
             }
+            
             axiosSecure.post('/users', userInfo)
               .then(res => {
                 if (res.data.insertedId) {
@@ -41,7 +44,8 @@ const Register = () => {
             const userProfile = { displayName: name, photoURL: photoURL }
             updateUserProfile(userProfile)
               .then(() => {
-                toast('Register Successful')
+                toast('Register Successful');
+                navigate("/")
               })
               .catch(err => {
                 toast.error(err);

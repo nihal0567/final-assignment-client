@@ -27,7 +27,6 @@ import MyOrders from "../Layout/DashboardLayout/Buyer/MyOrders";
 import TrackOrder from "../Layout/DashboardLayout/Buyer/TrackOrder";
 import Profile from "../Layout/DashboardLayout/Buyer/Profile";
 import Statistics from "../Layout/DashboardLayout/Statistics";
-import AdminRoute from "../Layout/DashboardLayout/Admin/AdminRoute";
 
 
 export const router = createBrowserRouter([
@@ -52,10 +51,7 @@ export const router = createBrowserRouter([
                 path: '/product-details/:id',
                 element: <PrivateRoute><ProductDetailsPage /></PrivateRoute>,
             },
-            {
-                path: 'add-product',
-                element: <AddProduct />
-            },
+            
             {
                 path: '/about',
                 Component: About
@@ -93,14 +89,17 @@ export const router = createBrowserRouter([
                 path: 'all-products',
                 element: <AllProducts />
             },
-            
+            {
+                path: 'add-product',
+                element: <AddProduct />
+            },
             {
                 path: 'statistics',
                 element: <Statistics />
             },
             {
                 path: 'manage-products',
-                element: <AdminRoute><ManageProducts /></AdminRoute>
+                element: <ManageProducts />
             },
             {
                 path: 'update-products/:id',
@@ -127,7 +126,7 @@ export const router = createBrowserRouter([
                 Component: AllOrders,
             },
             {
-                path: 'payment-success',
+                path: 'verify-payment',
                 Component: PaymentSuccess,
             },
             {

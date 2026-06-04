@@ -5,7 +5,7 @@ import useRole from '../../../hooks/useRole';
 import ForbiddenAccess from '../../../Components/Shared/ForbiddenAccess';
 
 const AdminRoute = ({children}) => {
-    const {user, loading} = useAuth()
+    const { loading} = useAuth()
     const { role, roleLoading} = useRole()
     if (loading || roleLoading) {
         <Loading/>

@@ -14,9 +14,9 @@ const TrackOrder = () => {
 
   // Fetch single order
   const { data: order, isLoading, error } = useQuery({
-    queryKey: ["trackOrder", orderId],
+    queryKey: ["payments", user.email ],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/orders/${orderId}`);
+      const res = await axiosSecure.get(``);
       return res.data;
     },
     enabled: !!orderId && !!user,
@@ -34,7 +34,7 @@ const TrackOrder = () => {
     return (
       <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-3xl text-red-400">Order not found</h2>
+          <h2 className="text-3xl text-red-400">Order </h2>
           <button
             onClick={() => navigate("/dashboard/my-orders")}
             className="btn btn-neutral mt-6"

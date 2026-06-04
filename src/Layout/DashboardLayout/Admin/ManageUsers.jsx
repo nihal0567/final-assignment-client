@@ -11,9 +11,9 @@ const ManageUsers = () => {
 
   // Fetch all users
   const { data: users = [], isLoading, refetch } = useQuery({
-    queryKey: ["users"],
+    queryKey: ['users'],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users");
+      const res = await axiosSecure.get(`/users`);
       return res.data;
     },
   });
@@ -91,23 +91,17 @@ const ManageUsers = () => {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user._id} className="hover:bg-slate-800/50">
-                  <td>{user.name || "N/A"}</td>
+                <tr key={user._id} className="bg-slate-800/50">
+                  <td>{user.displayName || "N/A"}</td>
                   <td>{user.email}</td>
                   <td>
                     <span className={`badge ${user.role === "Admin" ? "badge-success" : user.role === "Manager" ? "badge-info" : "badge-warning"}`}>
                       {user.role}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`badge ${user.status === "active" ? "badge-success" : "badge-error"}`}>
-                      {user.status || "active"}
                     </span>
                   </td>
                   <td>

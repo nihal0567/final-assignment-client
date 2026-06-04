@@ -9,36 +9,36 @@ const PaymentSuccess = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
+  console.log(sessionId);
+  
   useEffect(() => {
     if (sessionId) {
-      console.log('Verifying session:', sessionId);
-      axiosSecure
-        .get(`/verify-payment/${sessionId}`)
+     
+      axiosSecure.post(`/verify-payment?session_id=${sessionId}`)
         .then((res) => {
+          console.log("payment post", res.data);
+          
           if (res.data.success) {
-            toast.success('পেমেন্ট সফল! অর্ডার কনফার্ম হয়েছে।');
-            navigate('/dashboard/my-orders'); // অথবা তোমার পছন্দের পেজ
-          } else {
-            toast.error('পেমেন্ট verify হতে ব্যর্থ।');
+            toast.success('Payment Success! Order has been Confirmed।');
           }
         })
         .catch((err) => {
           console.error(err);
-          toast.error('কোনো সমস্যা হয়েছে।');
+          toast.error('There is a Problem।');
         });
     }
-  }, [sessionId]);
+  }, [sessionId, axiosSecure, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
       <div className="text-center">
-        <h1 className="text-5xl font-bold text-green-500 mb-4">পেমেন্ট সফল!</h1>
-        <p className="text-xl mb-6">আপনার অর্ডার কনফার্ম হয়েছে।</p>
+        <h1 className="text-5xl font-bold text-green-500 mb-4">Payment Success!</h1>
+        <p className="text-xl mb-6">Your Order has been Confirmed !</p>
         <button
           onClick={() => navigate('/dashboard/my-orders')}
           className="btn btn-success px-8 py-4 text-lg"
         >
-          My Orders দেখুন
+          My Orders 
         </button>
       </div>
     </div>

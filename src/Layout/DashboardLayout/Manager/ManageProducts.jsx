@@ -17,7 +17,7 @@ const ManageProducts = () => {
             return res.data;
         }
     });
-console.log(products);
+
     // 🔍 Search Filter (NO existing code harmed)
     const filteredProducts = products.filter(product =>
         product.productName?.toLowerCase().includes(search.toLowerCase()) ||

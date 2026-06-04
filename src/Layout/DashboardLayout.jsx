@@ -2,18 +2,17 @@ import React from 'react';
 import { Link, Outlet } from 'react-router';
 import { FaCalculator, FaCartArrowDown, FaFirstOrderAlt, FaTasks } from 'react-icons/fa';
 import Footer from '../Pages/Footer';
-import { MdInventory2 } from "react-icons/md";
+import { MdInventory2, MdTrackChanges } from "react-icons/md";
 import { FaFirstOrder } from "react-icons/fa";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
 import { AiOutlineProduct } from "react-icons/ai";
 import { FaUserShield } from "react-icons/fa6";
 import useAuth from '../hooks/useAuth';
-import useRole from '../hooks/useRole';
 
 
 const DashboardLayout = () => {
-    const { role } = useRole()
+//    const { role } = useRole()
         const { user } = useAuth();
         console.log(user);
     return (
@@ -54,8 +53,7 @@ const DashboardLayout = () => {
                                     </li>
                                 </Link>
 
-                               {
-                                role === 'Admin' && <>
+                               
                                 <Link to="manage-users">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Users">
@@ -74,19 +72,8 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
-                                <Link to="all-orders">
-                                    <li>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All Orders">
-                                            {/* Product icon */}
-                                            <AiOutlineProduct />
-                                            <span className="is-drawer-close:hidden">All Orders</span>
-                                        </button>
-                                    </li>
-                                </Link>
-                                </>
-                               }
 
-                                {/* <Link to="statistics">
+                                <Link to="statistics">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="data-visualize">
                                          
@@ -95,15 +82,7 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
-                                <Link to="manage-users">
-                                    <li>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Users">
-                                        
-                                            <FaUserShield />
-                                            <span className="is-drawer-close:hidden">Manage Users</span>
-                                        </button>
-                                    </li>
-                                </Link>
+
                                 <Link to="add-product">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add Products">
@@ -113,15 +92,7 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
-                                <Link to="all-products">
-                                    <li>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All Products">
-                                      
-                                            <FaCalculator />
-                                            <span className="is-drawer-close:hidden">All Products</span>
-                                        </button>
-                                    </li>
-                                </Link>
+
                                 <Link to="my-orders">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Orders">
@@ -131,6 +102,7 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
+
                                 <Link to="manage-products">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Products">
@@ -140,6 +112,7 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
+
                                 <Link to="pending-orders">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Pending Orders">
@@ -149,6 +122,7 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
+
                                 <Link to="approve-orders">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Approve Orders">
@@ -158,6 +132,7 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
+
                                 <Link to="my-profile">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Profile">
@@ -167,6 +142,7 @@ const DashboardLayout = () => {
                                         </button>
                                     </li>
                                 </Link>
+                                
                                 <Link to="all-orders">
                                     <li>
                                         <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All Orders">
@@ -175,7 +151,17 @@ const DashboardLayout = () => {
                                             <span className="is-drawer-close:hidden">All Orders</span>
                                         </button>
                                     </li>
-                                </Link> */}
+                                </Link>
+
+                                <Link to="track-order/:orderId">
+                                    <li>
+                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Track Orders">
+                                      
+                                            <MdTrackChanges />
+                                            <span className="is-drawer-close:hidden">Track Orders</span>
+                                        </button>
+                                    </li>
+                                </Link>
                             </ul>
                         </div>
                     </div>

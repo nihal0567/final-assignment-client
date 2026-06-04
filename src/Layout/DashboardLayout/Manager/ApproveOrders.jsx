@@ -19,12 +19,13 @@ const ApprovedOrders = () => {
 
   // Fetch approved orders
   const { data: orders = [], refetch, isLoading } = useQuery({
-    queryKey: ["approvedOrders"],
+    queryKey: ["orders"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/orders?status=approved");
+      const res = await axiosSecure.get(`/orders?status=approved`);
       return res.data;
     },
   });
+  console.log(orders);
 
   // Open Add Tracking Modal
   const openAddTracking = (order) => {
@@ -101,7 +102,7 @@ const ApprovedOrders = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-slate-800/50">
+                  <tr key={order._id} className="bg-slate-800/50">
                     <td className="font-mono">{order._id.slice(-8)}</td>
                     <td>{order.email || "N/A"}</td>
                     <td>{order.productTitle || "N/A"}</td>

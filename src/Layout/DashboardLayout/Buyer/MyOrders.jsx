@@ -85,7 +85,7 @@ const MyOrders = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-slate-800/50">
+                  <tr key={order._id} className="bg-slate-800/50">
                     <td className="font-mono">{order._id.slice(-8)}</td>
                     <td>{order.productTitle || "N/A"}</td>
                     <td>{order.orderQuantity || 0}</td>

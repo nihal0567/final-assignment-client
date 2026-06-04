@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useState } from "react";
-import Loading from "../../../Components/Loading"; // তোমার existing Loading component
+import Loading from "../../../Components/Loading"; 
 import { toast } from "react-toastify";
-import moment from "moment"; // npm install moment (optional, date format এর জন্য)
+import moment from "moment"; 
 
 const PendingOrders = () => {
   const axiosSecure = useAxiosSecure();
@@ -12,9 +12,9 @@ const PendingOrders = () => {
 
   // Fetch pending orders
   const { data: orders = [], refetch, isLoading } = useQuery({
-    queryKey: ["pendingOrders"],
+    queryKey: ["products"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/orders?status=pending");
+      const res = await axiosSecure.get("/orders");
       return res.data;
     },
   });
@@ -22,22 +22,22 @@ const PendingOrders = () => {
   // Approve order
   const handleApprove = async (id) => {
     const result = await Swal.fire({
-      title: "অর্ডার Approve করবেন?",
+      title: "Are You Sure to Approve this Order?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, Approve",
-      cancelButtonText: "না",
+      confirmButtonText: "Yes, Approve it",
+      cancelButtonText: "No",
     });
 
     if (result.isConfirmed) {
       try {
         const res = await axiosSecure.patch(`/orders/${id}`, {
-          status: "Approved",
+          status: "approved",
           approvedAt: new Date(),
         });
 
         if (res.data.modifiedCount > 0) {
-          toast.success("অর্ডার Approved হয়েছে!");
+          toast.success("Order has been Approved!");
           refetch();
         }
       } catch (err) {
@@ -50,11 +50,11 @@ const PendingOrders = () => {
   // Reject order
   const handleReject = async (id) => {
     const result = await Swal.fire({
-      title: "অর্ডার Reject করবেন?",
+      title: "Are You Sure to Reject this Order?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, Reject",
-      cancelButtonText: "না",
+      confirmButtonText: "Yes, Reject",
+      cancelButtonText: "No",
     });
 
     if (result.isConfirmed) {
@@ -64,7 +64,7 @@ const PendingOrders = () => {
         });
 
         if (res.data.modifiedCount > 0) {
-          toast.success("অর্ডার Rejected হয়েছে!");
+          toast.success("Order had been Rejected !");
           refetch();
         }
       } catch (err) {
@@ -85,7 +85,7 @@ const PendingOrders = () => {
 
         {orders.length === 0 ? (
           <div className="text-center text-gray-400 text-xl">
-            কোনো Pending Order নেই
+            No Pending Order 
           </div>
         ) : (
           <div className="overflow-x-auto bg-slate-900 rounded-3xl shadow-2xl">
@@ -102,9 +102,9 @@ const PendingOrders = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-slate-800/50">
+                  <tr key={order._id} className="bg-slate-800/50">
                     <td className="font-mono">{order._id.slice(-8)}</td>
-                    <td>{order.email || order.userName || "N/A"}</td>
+                    <td>{order.email || order.displayName || "N/A"}</td>
                     <td>{order.productTitle || order.productName || "N/A"}</td>
                     <td>{order.orderQuantity || order.quantity || 0}</td>
                     <td>

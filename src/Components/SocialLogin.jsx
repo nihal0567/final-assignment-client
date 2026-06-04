@@ -1,11 +1,13 @@
 import React from 'react';
 import useAuth from '../hooks/useAuth';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import useAxiosSecure from '../hooks/useAxiosSecure';
+import { toast } from 'react-toastify';
 
 const SocialLogin = () => {
     const { signInGoogle } = useAuth()
     const axiosSecure = useAxiosSecure()
+    const location = useLocation()
     const navigate = useNavigate()
 
     const googleSignIn = () => {
@@ -17,14 +19,15 @@ const SocialLogin = () => {
                     displayName: result.user.displayName,
                     photoURL: result.user.photoURL
                 }
-
+                // user data stored in database
                 axiosSecure.post('/users', userInfo)
                 .then(res=>{
                     console.log('user data set',res.data);
+                    toast("Login Successful")
                     navigate(location.state || '/')
                 })
-            }).catch(err => {
-                console.log(err);
+            }).catch(() => {
+                toast.warning("Password Incorrect");
             })
     }
     return (
